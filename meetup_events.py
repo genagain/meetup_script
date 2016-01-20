@@ -38,14 +38,15 @@ if start < datetime and datetime < end:
   group = events[0]['group']['name']
   name = events[0]['name']
   url = events[0]['event_url']
-  duration = events[0]['duration']
+  duration = events[0]['duration'] / 1e3
+  start_time = datetime.strftime("%-I:%M")
+  ipdb.set_trace()
   meetup = { 'name':name,
              'group':group,
              'datetime':datetime.strftime("%A, %B %-d"),
              'start_time':0,
              'finish_time':1,
              'url':url }
-  ipdb.set_trace()
   meetups.append(meetup)
 
 ## TODO: Get events from all meetups
