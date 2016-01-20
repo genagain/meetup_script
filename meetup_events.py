@@ -1,4 +1,5 @@
 import requests
+import datetime
 import ipdb
 
 f = open('api_key.txt','r')
@@ -31,6 +32,9 @@ events = response['results']
 datetime = datetime.datetime.fromtimestamp(events[0]['time'] / 1e3)
 group = events[0]['group']['name']
 name = events[0]['name']
+url = events[0]['event_url']
+duration = events[0]['duration']
+# ipdb.set_trace()
 
 ## TODO: Get events from all meetups
 ## TODO: Filter the meetups down to ones happening this week
