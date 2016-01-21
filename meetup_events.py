@@ -1,5 +1,7 @@
 import requests
 from datetime import datetime, timedelta
+import os
+import csv
 import ipdb
 
 f = open('api_key.txt','r')
@@ -40,7 +42,6 @@ for event in events:
   name = str(event['name'])
   url = str(event['event_url'])
   start_time = datetime.strftime("%-I:%M")
-  ipdb.set_trace()
   meetup = { 'name':name,
              'group':group,
              'datetime':datetime.strftime("%A, %B %-d"),
@@ -48,6 +49,14 @@ for event in events:
              'url':url }
   meetups.append(meetup)
 
+os.remove('meetups.csv')
+
+with open('meetups.csv', 'w') as csvfile:
+  fieldnames = ['name', 'url', 'group', 'datetime', 'start_time']
+  writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+  writer.writeheader()
+  for meetup in meetups:
+    writer.writerow(meetup)
 ## TODO: Get events from all meetups
 ## TODO: Filter the meetups down to ones happening this week
 ## Write the name, group, date, start time, finish time, and url to CSV
