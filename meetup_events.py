@@ -7,14 +7,14 @@ import ipdb
 f = open('api_key.txt','r')
 api_key = f.read()
 api_key = api_key.rstrip()
+
 present = datetime.now()
 start = present - timedelta(days=present.weekday())
 end = start + timedelta(days=4)
 
-meetups = ['bostonpython',
+all_meetups = ['bostonpython',
            'Maptime-Boston', 
            'ACM-Boston',
-           'Cambridge-Hackspace',
            'Boston-Data-Mining',
            'SocialDataBoston',
            'Boston-Digital-Analytics-Meetup',
@@ -28,26 +28,30 @@ meetups = ['bostonpython',
            'FREE-Big-Data-Hands-On-Workshops',
            'julia-cajun',
            'The-Boston-Cassandra-Users',
-           'Happy-Data-Hour-Boston'
-           ]
-params = {"sign":"true", "key":api_key, "group_urlname":"bostonpython"}
-request = requests.get("http://api.meetup.com/2/events", params)
-response = request.json()
-events = response['results']
+           'bostonml',
+           'Boston-Sports-Analytics-Meetup',
+           'Cambridge-Dataflow-Analytics-Meetup',
+           'Happy-Data-Hour-Boston']
 meetups = []
-for event in events:
-  datetime = datetime.fromtimestamp(event['time'] / 1e3)
-  # if start < datetime and datetime < end:
-  group = str(event['group']['name'])
-  name = str(event['name'])
-  url = str(event['event_url'])
-  start_time = datetime.strftime("%-I:%M")
-  meetup = { 'name':name,
-             'group':group,
-             'datetime':datetime.strftime("%A, %B %-d"),
-             'start_time':start_time,
-             'url':url }
-  meetups.append(meetup)
+
+for meetup in all_meetups:
+  params = {"sign":"true", "key":api_key, "group_urlname":meetup}
+  request = requests.get("http://api.meetup.com/2/events", params)
+  response = request.json()
+  events = response['results']
+  for event in events:
+    datetime = datetime.fromtimestamp(event['time'] / 1e3)
+    # if start < datetime and datetime < end:
+    group = str(event['group']['name'])
+    name = str(event['name'])
+    url = str(event['event_url'])
+    start_time = datetime.strftime("%-I:%M")
+    meetup = { 'name':name,
+               'group':group,
+               'datetime':datetime.strftime("%A, %B %-d"),
+               'start_time':start_time,
+               'url':url }
+    meetups.append(meetup)
 
 os.remove('meetups.csv')
 
